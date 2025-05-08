@@ -1,4 +1,14 @@
-class ApplicationController < ActionController::Base
-  # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
-  allow_browser versions: :modern
+class ApplicationController < ActionController::API
+
+  include CanCan::ControllerAdditions
+
+  def current_student
+    # debugger
+    Student.find_by(id: request.headers['X-Student-ID'])
+  end
+
+  def current_ability
+    # debugger
+    @current_ability ||= Ability.new(current_student)
+  end
 end
